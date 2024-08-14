@@ -17,10 +17,11 @@ final class Provider
     /** @return iterable<string, array<DataSet>> */
     public static function sets(): iterable
     {
-        $iterator = new RecursiveDirectoryIterator(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'DataSets' . DIRECTORY_SEPARATOR);
+        $iterator = new RecursiveDirectoryIterator(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'DataSets');
 
         foreach ($iterator as $node) {
             if (! ($node instanceof SplFileInfo) || ! $node->isFile()) {
+                /** @infection-ignore-all */
                 continue;
             }
 

@@ -20,7 +20,7 @@ final class RepresentationTest extends TestCase
     public function keys(): void
     {
         static::assertContains(
-            'Basic',
+            'TripleNestedSchema',
             array_keys([...Provider::sets()]),
         );
     }
@@ -29,7 +29,7 @@ final class RepresentationTest extends TestCase
     public function names(): void
     {
         static::assertContains(
-            'Basic',
+            'TripleNestedSchema',
             array_map(
                 static fn (DataSet $dataSet): string => $dataSet->name,
                 array_map(
@@ -44,7 +44,7 @@ final class RepresentationTest extends TestCase
     public function fileNames(): void
     {
         static::assertContains(
-            dirname(__FILE__, 2) . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR . 'DataSets' . DIRECTORY_SEPARATOR . 'Basic.yaml',
+            dirname(__FILE__, 2) . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR . 'DataSets' . DIRECTORY_SEPARATOR . 'TripleNestedSchema.yaml',
             array_map(
                 static fn (DataSet $dataSet): string => $dataSet->fileName,
                 array_map(
