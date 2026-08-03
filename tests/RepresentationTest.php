@@ -6,6 +6,7 @@ namespace OpenAPITools\Tests\TestData;
 
 use OpenAPITools\TestData\DataSet;
 use OpenAPITools\TestData\Provider;
+use PHPUnit\Framework\Attributes\Test;
 use WyriHaximus\TestUtilities\TestCase;
 
 use function array_keys;
@@ -16,19 +17,19 @@ use const DIRECTORY_SEPARATOR;
 
 final class RepresentationTest extends TestCase
 {
-    /** @test */
+    #[Test]
     public function keys(): void
     {
-        static::assertContains(
+        self::assertContains(
             'TripleNestedSchema',
             array_keys([...Provider::sets()]),
         );
     }
 
-    /** @test */
+    #[Test]
     public function names(): void
     {
-        static::assertContains(
+        self::assertContains(
             'TripleNestedSchema',
             array_map(
                 static fn (DataSet $dataSet): string => $dataSet->name,
@@ -40,10 +41,10 @@ final class RepresentationTest extends TestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function fileNames(): void
     {
-        static::assertContains(
+        self::assertContains(
             dirname(__FILE__, 2) . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR . 'DataSets' . DIRECTORY_SEPARATOR . 'TripleNestedSchema.yaml',
             array_map(
                 static fn (DataSet $dataSet): string => $dataSet->fileName,
