@@ -24,7 +24,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/basic"
+                - $ref: "#/components/schemas/basic"
 components:
   schemas:
     string:
@@ -48,34 +48,11 @@ components:
           required:
             - preferred
           properties:
-            # preferred, first, middle and last are structurally identical inline
-            # schemas. The first one encountered is registered under its own class
-            # name, the rest are registered as aliases of it.
             preferred:
-              type: object
-              required:
-                - value
-              properties:
-                value:
-                  type: string
+              "$ref": "#/components/schemas/string"
             first:
-              type: object
-              required:
-                - value
-              properties:
-                value:
-                  type: string
+              "$ref": "#/components/schemas/string"
             middle:
-              type: object
-              required:
-                - value
-              properties:
-                value:
-                  type: string
+              "$ref": "#/components/schemas/string"
             last:
-              type: object
-              required:
-                - value
-              properties:
-                value:
-                  type: string
+              "$ref": "#/components/schemas/string"
