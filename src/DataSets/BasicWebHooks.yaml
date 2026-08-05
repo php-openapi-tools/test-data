@@ -1,0 +1,63 @@
+openapi: "3.1.0"
+info:
+  version: 1.0.0
+  title: WebHook Test API
+  license:
+    name: MIT
+webhooks:
+  ping:
+    post:
+      summary: Ping webhook
+      description: A ping event sent to verify a webhook configuration.
+      operationId: ping/received
+      parameters:
+        - name: X-Event-Type
+          in: header
+          example: ping
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ping"
+      responses:
+        "200":
+          description: Return a 200 status to indicate that the data was received successfully
+  push:
+    post:
+      summary: Push webhook
+      description: A push event sent when commits are pushed.
+      operationId: push/created
+      parameters:
+        - name: X-Event-Type
+          in: header
+          example: push
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/push"
+      responses:
+        "200":
+          description: Return a 200 status to indicate that the data was received successfully
+components:
+  schemas:
+    ping:
+      type: object
+      required:
+        - zen
+      properties:
+        zen:
+          type: string
+    push:
+      type: object
+      required:
+        - ref
+      properties:
+        ref:
+          type: string
