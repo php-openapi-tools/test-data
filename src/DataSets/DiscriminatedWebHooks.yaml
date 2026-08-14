@@ -1,0 +1,51 @@
+openapi: "3.1.0"
+info:
+  version: 1.0.0
+  title: Discriminated WebHook Test API
+  license:
+    name: MIT
+webhooks:
+  delivery:
+    post:
+      summary: Delivery webhook
+      operationId: delivery/received
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              oneOf:
+                - $ref: "#/components/schemas/pingPayload"
+                - $ref: "#/components/schemas/pushPayload"
+              discriminator:
+                propertyName: eventType
+                mapping:
+                  ping: "#/components/schemas/pingPayload"
+                  push: "#/components/schemas/pushPayload"
+      responses:
+        "200":
+          description: OK
+components:
+  schemas:
+    pingPayload:
+      type: object
+      required:
+        - eventType
+        - zen
+      properties:
+        eventType:
+          type: string
+          enum: [ping]
+        zen:
+          type: string
+    pushPayload:
+      type: object
+      required:
+        - eventType
+        - ref
+      properties:
+        eventType:
+          type: string
+          enum: [push]
+        ref:
+          type: string

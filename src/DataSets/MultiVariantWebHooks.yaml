@@ -1,0 +1,61 @@
+openapi: "3.1.0"
+info:
+  version: 1.0.0
+  title: Multi Variant WebHook Test API
+  license:
+    name: MIT
+webhooks:
+  notifyAlpha:
+    post:
+      summary: Alpha notify webhook
+      operationId: notify/alpha
+      parameters:
+        - name: X-Notify-Variant
+          in: header
+          example: alpha
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/alpha"
+      responses:
+        "200":
+          description: OK
+  notifyBeta:
+    post:
+      summary: Beta notify webhook
+      operationId: notify/beta
+      parameters:
+        - name: X-Notify-Variant
+          in: header
+          example: beta
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/beta"
+      responses:
+        "200":
+          description: OK
+components:
+  schemas:
+    alpha:
+      type: object
+      required:
+        - message
+      properties:
+        message:
+          type: string
+    beta:
+      type: object
+      required:
+        - count
+      properties:
+        count:
+          type: integer
