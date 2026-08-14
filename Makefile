@@ -85,7 +85,7 @@ else
 	$(DOCKER_RUN_WITH_SOCKET) make all-raw
 endif
 all-raw: ## The real runs everything, but due to sponge it has to be ran inside DOCKER_RUN ##U##
-	$(MAKE) composer-validate syntax-php composer-normalize rector-upgrade cs-fix cs stan unit-testing mutation-testing composer-require-checker composer-unused backward-compatibility-check ## Count: 12
+	$(MAKE) validate-data-sets composer-validate syntax-php composer-normalize rector-upgrade cs-fix cs stan unit-testing mutation-testing composer-require-checker composer-unused backward-compatibility-check ## Count: 13
 
 
 ## Run a subset of everything for those that find everything intimidating
@@ -96,7 +96,7 @@ else
 	$(DOCKER_RUN_WITH_SOCKET) make contrib-raw
 endif
 contrib-raw: ## The real runs everything, but due to sponge it has to be ran inside DOCKER_RUN ##U##
-	$(MAKE) cs-fix cs unit-testing composer-require-checker composer-unused ## Count: 5
+	$(MAKE) validate-data-sets cs-fix cs unit-testing composer-require-checker composer-unused ## Count: 6
 
 
 ## Temporary set of migrations to get all my repos in shape
@@ -406,6 +406,11 @@ migrations-renovate-set-composer-constraint: #### Always keep renovate's `constr
 
 
 ## Our default jobs
+validate-data-sets: ## Validate all OpenAPI data sets in src/DataSets/ ##*AEC*##
+	@set -euo pipefail; shopt -s nullglob; for file in src/DataSets/*.{yaml,yml,json}; do \
+		echo "Validating $${file}"; \
+		$(DOCKER_RUN) vendor/bin/php-openapi validate "$${file}"; \
+	done
 
 on-install-or-update: ## Tasks, like migrations, that specifically have be run after composer install or update. These will also run by self hosted Renovate ####
 ifeq ("$(ON_INSTALL_OR_UPDATE_HAS_DIRECT_DOCKER_TASKS)","TRUE")
@@ -508,7 +513,7 @@ run: ## Provides access in the expected environment to run a single command and 
 
 help: ## Show this help ####
 	@printf "\033[33mUsage:\033[0m\n  make [target]\n\n\033[33mTargets:\033[0m\n"
-	@printf '%b\n' 'all: ## Runs everything\nbackward-compatibility-check: ## Check code for backwards incompatible changes\nbackward-compatibility-check-raw: ## Check code for backwards incompatible changes, doesn'\''t ignore the failure\ncomposer-normalize: ## Normalize composer.json\ncomposer-outdated: ## Show outdated packages\ncomposer-require: ## Require passed dependencies\ncomposer-require-checker: ## Ensure we require every package used in this package directly\ncomposer-show: ## Show dependencies\ncomposer-unused: ## Ensure we don'\''t require any package we don'\''t use in this package directly\ncomposer-validate: ## Ensure we don'\''t require any package we don'\''t use in this package directly\ncomposer-why: ## Show why a specific dependency is loaded\ncontrib: ## Runs a subset of everything (all)\ncs: ## Check the code for code style issues\ncs-fix: ## Fix any automatically fixable code style issues\ncs-fix-debug: ## Fix any automatically fixable code style issues, but with debugging output\nhelp: ## Show this help\nhelp-contrib: ## Show the migrations help\nhelp-migrations: ## Show the migrations help\ninstall: ## Install dependencies\nmutation-testing: ## Run mutation testing\nmutation-testing-raw: ## Run mutation testing\non-install-or-update: ## Tasks, like migrations, that specifically have be run after composer install or update. These will also run by self hosted Renovate\noutdated: ## Show outdated dependencies\nrector-upgrade: ## Upgrade any automatically upgradable old code\nrun: ## Provides access in the expected environment to run a single command and then return\nshell: ## Provides Shell access in the expected environment\nstan: ## Run static analysis (PHPStan)\nsupported-features: ## CI: List the features this package supports\nsyntax-php: ## Lint PHP syntax\ntask-list-ci-all: ## CI: Generate a JSON array of jobs to run on all variations\ntask-list-ci-dos: ## CI: Generate a JSON array of jobs to run Directly on the OS variations\ntask-list-ci-high: ## CI: Generate a JSON array of jobs to run against the highest dependencies on the primary threading target\ntask-list-ci-locked: ## CI: Generate a JSON array of jobs to run against the locked dependencies on the primary threading target\ntask-list-ci-low: ## CI: Generate a JSON array of jobs to run against the lowest dependencies on the primary threading target\nunit-testing: ## Run tests\nunit-testing-filter: ## Run tests with specified filter\nunit-testing-raw: ## Run tests\nupdate: ## Update dependencies\nupdate-lock: ## Update lockfile' | awk 'BEGIN {FS = ":.*?## "}; {printf "  \033[32m%-32s\033[0m %s\n", $$1, $$2}' | tr -d '#'
+	@printf '%b\n' 'all: ## Runs everything\nbackward-compatibility-check: ## Check code for backwards incompatible changes\nbackward-compatibility-check-raw: ## Check code for backwards incompatible changes, doesn'\''t ignore the failure\ncomposer-normalize: ## Normalize composer.json\ncomposer-outdated: ## Show outdated packages\ncomposer-require: ## Require passed dependencies\ncomposer-require-checker: ## Ensure we require every package used in this package directly\ncomposer-show: ## Show dependencies\ncomposer-unused: ## Ensure we don'\''t require any package we don'\''t use in this package directly\ncomposer-validate: ## Ensure we don'\''t require any package we don'\''t use in this package directly\ncomposer-why: ## Show why a specific dependency is loaded\ncontrib: ## Runs a subset of everything (all)\ncs: ## Check the code for code style issues\ncs-fix: ## Fix any automatically fixable code style issues\ncs-fix-debug: ## Fix any automatically fixable code style issues, but with debugging output\nhelp: ## Show this help\nhelp-contrib: ## Show the migrations help\nhelp-migrations: ## Show the migrations help\ninstall: ## Install dependencies\nmutation-testing: ## Run mutation testing\nmutation-testing-raw: ## Run mutation testing\non-install-or-update: ## Tasks, like migrations, that specifically have be run after composer install or update. These will also run by self hosted Renovate\noutdated: ## Show outdated dependencies\nrector-upgrade: ## Upgrade any automatically upgradable old code\nrun: ## Provides access in the expected environment to run a single command and then return\nshell: ## Provides Shell access in the expected environment\nstan: ## Run static analysis (PHPStan)\nsupported-features: ## CI: List the features this package supports\nsyntax-php: ## Lint PHP syntax\ntask-list-ci-all: ## CI: Generate a JSON array of jobs to run on all variations\ntask-list-ci-dos: ## CI: Generate a JSON array of jobs to run Directly on the OS variations\ntask-list-ci-high: ## CI: Generate a JSON array of jobs to run against the highest dependencies on the primary threading target\ntask-list-ci-locked: ## CI: Generate a JSON array of jobs to run against the locked dependencies on the primary threading target\ntask-list-ci-low: ## CI: Generate a JSON array of jobs to run against the lowest dependencies on the primary threading target\nunit-testing: ## Run tests\nunit-testing-filter: ## Run tests with specified filter\nunit-testing-raw: ## Run tests\nupdate: ## Update dependencies\nupdate-lock: ## Update lockfile\nvalidate-data-sets: ## Validate all OpenAPI data sets in src/DataSets/' | awk 'BEGIN {FS = ":.*?## "}; {printf "  \033[32m%-32s\033[0m %s\n", $$1, $$2}' | tr -d '#'
 
 help-migrations: ## Show the migrations help ####
 	@printf "\033[33mUsage:\033[0m\n  make [target]\n\n\033[33mTargets:\033[0m\n"
@@ -516,13 +521,13 @@ help-migrations: ## Show the migrations help ####
 
 help-contrib: ## Show the migrations help ####
 	@printf "\033[33mUsage:\033[0m\n  make [target]\n\n\033[33mTargets:\033[0m\n"
-	@printf '%b\n' 'composer-require-checker: ## Ensure we require every package used in this package directly\ncomposer-unused: ## Ensure we don'\''t require any package we don'\''t use in this package directly\ncs: ## Check the code for code style issues\ncs-fix: ## Fix any automatically fixable code style issues\nunit-testing: ## Run tests' | awk 'BEGIN {FS = ":.*?## "}; {printf "  \033[32m%-32s\033[0m %s\n", $$1, $$2}' | tr -d '#'
+	@printf '%b\n' 'composer-require-checker: ## Ensure we require every package used in this package directly\ncomposer-unused: ## Ensure we don'\''t require any package we don'\''t use in this package directly\ncs: ## Check the code for code style issues\ncs-fix: ## Fix any automatically fixable code style issues\nunit-testing: ## Run tests\nvalidate-data-sets: ## Validate all OpenAPI data sets in src/DataSets/' | awk 'BEGIN {FS = ":.*?## "}; {printf "  \033[32m%-32s\033[0m %s\n", $$1, $$2}' | tr -d '#'
 
 task-list-ci:
 	@echo "[]"
 
 task-list-ci-all: ## CI: Generate a JSON array of jobs to run on all variations
-	@echo "[\"composer-validate\",\"syntax-php\",\"cs\",\"stan\",\"unit-testing\",\"mutation-testing\",\"composer-require-checker\",\"composer-unused\",\"backward-compatibility-check\"]" ## Count: 9
+	@echo "[\"validate-data-sets\",\"composer-validate\",\"syntax-php\",\"cs\",\"stan\",\"unit-testing\",\"mutation-testing\",\"composer-require-checker\",\"composer-unused\",\"backward-compatibility-check\"]" ## Count: 10
 
 task-list-ci-dos: ## CI: Generate a JSON array of jobs to run Directly on the OS variations
 	@echo "[\"unit-testing-raw\"]" ## Count: 1
@@ -531,7 +536,7 @@ task-list-ci-low: ## CI: Generate a JSON array of jobs to run against the lowest
 	@echo "[\"syntax-php\",\"cs\",\"stan\",\"mutation-testing\"]" ## Count: 4
 
 task-list-ci-locked: ## CI: Generate a JSON array of jobs to run against the locked dependencies on the primary threading target
-	@echo "[\"composer-validate\",\"cs\",\"stan\",\"mutation-testing\",\"composer-require-checker\",\"composer-unused\",\"backward-compatibility-check\"]" ## Count: 7
+	@echo "[\"validate-data-sets\",\"composer-validate\",\"cs\",\"stan\",\"mutation-testing\",\"composer-require-checker\",\"composer-unused\",\"backward-compatibility-check\"]" ## Count: 8
 
 task-list-ci-high: ## CI: Generate a JSON array of jobs to run against the highest dependencies on the primary threading target
 	@echo "[\"syntax-php\",\"cs\",\"stan\",\"mutation-testing\"]" ## Count: 4
