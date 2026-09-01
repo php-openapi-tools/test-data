@@ -14,7 +14,7 @@
   "require-dev": {
     "devizzent/cebe-php-openapi": "^1.1",
     "wyrihaximus/async-test-utilities": "^13.5.2",
-    "wyrihaximus/makefiles": "^0.14.6"
+    "wyrihaximus/makefiles": "^0.14.7"
   },
   "autoload": {
     "psr-4": {
