@@ -27,7 +27,6 @@ final class Provider
 
         foreach ($iterator as $node) {
             if (! ($node instanceof SplFileInfo) || ! $node->isFile()) {
-                /** @infection-ignore-all */
                 continue;
             }
 
